@@ -14,6 +14,9 @@ export interface Trigram {
   humanMeaning: string;
   modernScenario: string;
   plainExplanation: string;
+  suitableProblems: string;
+  commonPitfall: string;
+  relatedHexagramIds: number[];
   sortOrder: number;
 }
 
@@ -142,4 +145,3 @@ export interface AiPromptTemplate {
   content: string;
   enabled: boolean;
 }
-

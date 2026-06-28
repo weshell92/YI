@@ -48,6 +48,9 @@ public class AdminContentController {
                 trigram.humanMeaning(),
                 trigram.modernScenario(),
                 trigram.plainExplanation(),
+                trigram.suitableProblems(),
+                trigram.commonPitfall(),
+                trigram.relatedHexagramIds(),
                 trigram.sortOrder()
         )));
     }
@@ -189,4 +192,3 @@ public class AdminContentController {
         return ApiResponse.ok(null, "deleted");
     }
 }
-

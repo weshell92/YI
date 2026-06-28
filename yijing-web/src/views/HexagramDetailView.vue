@@ -11,17 +11,42 @@
 
     <div class="section-grid two-col detail-grid">
       <section class="glass-panel detail-card">
-        <h2>卦象结构</h2>
+        <h2>卦象图与上下卦</h2>
         <div class="detail-list">
-          <span><strong>上卦</strong>{{ detail.upperTrigram.name }} · {{ detail.upperTrigram.nature }}</span>
-          <span><strong>下卦</strong>{{ detail.lowerTrigram.name }} · {{ detail.lowerTrigram.nature }}</span>
-          <span><strong>一句话</strong>{{ detail.hexagram.shortDescription }}</span>
-          <span><strong>处境</strong>{{ detail.hexagram.situationAnalysis }}</span>
+          <span><strong>上卦</strong>{{ detail.upperTrigram.name }}卦 · {{ detail.upperTrigram.nature }}</span>
+          <span><strong>下卦</strong>{{ detail.lowerTrigram.name }}卦 · {{ detail.lowerTrigram.nature }}</span>
+          <span><strong>结构</strong>{{ detail.hexagram.structure }}</span>
+          <span><strong>一句话解释</strong>{{ detail.hexagram.shortDescription }}</span>
         </div>
       </section>
+
       <section class="glass-panel detail-card">
-        <h2>行动建议</h2>
-        <p>{{ detail.hexagram.advice }}</p>
+        <h2>当前处境与行动建议</h2>
+        <p><strong>当前处境：</strong>{{ detail.hexagram.situationAnalysis }}</p>
+        <p><strong>行动建议：</strong>{{ detail.hexagram.advice }}</p>
+      </section>
+    </div>
+
+    <div class="section-grid two-col detail-grid">
+      <section class="glass-panel detail-card">
+        <h2>卦辞、彖辞、象辞</h2>
+        <div class="detail-list">
+          <span><strong>卦辞</strong>{{ detail.hexagram.guaCi }}</span>
+          <span><strong>彖辞</strong>{{ detail.hexagram.tuanCi }}</span>
+          <span><strong>象辞</strong>{{ detail.hexagram.xiangCi }}</span>
+        </div>
+      </section>
+
+      <section class="glass-panel detail-card">
+        <h2>白话解释与常见误解</h2>
+        <p>{{ detail.hexagram.plainExplanation }}</p>
+        <p><strong>常见误解：</strong>{{ detail.hexagram.commonMistakes }}</p>
+      </section>
+    </div>
+
+    <div class="section-grid two-col detail-grid">
+      <section class="glass-panel detail-card">
+        <h2>现实场景判断</h2>
         <div class="detail-list">
           <span><strong>事业</strong>{{ detail.hexagram.careerExplanation }}</span>
           <span><strong>感情</strong>{{ detail.hexagram.loveExplanation }}</span>
@@ -29,38 +54,32 @@
           <span><strong>创业</strong>{{ detail.hexagram.businessExplanation }}</span>
         </div>
       </section>
-    </div>
 
-    <div class="section-grid two-col detail-grid">
       <section class="glass-panel detail-card">
-        <h2>古文原文</h2>
-        <div class="detail-list">
-          <span><strong>卦辞</strong>{{ detail.hexagram.guaCi }}</span>
-          <span><strong>彖辞</strong>{{ detail.hexagram.tuanCi }}</span>
-          <span><strong>象辞</strong>{{ detail.hexagram.xiangCi }}</span>
-        </div>
-      </section>
-      <section class="glass-panel detail-card">
-        <h2>白话解释与误区</h2>
-        <p>{{ detail.hexagram.plainExplanation }}</p>
-        <p><strong>常见误解：</strong>{{ detail.hexagram.commonMistakes }}</p>
+        <h2>阅读这卦时最值得问自己的问题</h2>
+        <ul class="question-list">
+          <li>我现在处在哪个阶段，是起步、受阻、积累、转折还是收束？</li>
+          <li>当前局势里最关键的风险、边界和变化点分别是什么？</li>
+          <li>我该进、该退、该守、该等，还是该先做减法？</li>
+        </ul>
       </section>
     </div>
 
     <section class="glass-panel detail-card">
-      <h2>六爻</h2>
+      <h2>六爻展开</h2>
       <div class="line-grid">
         <article v-for="line in detail.lines" :key="line.id" class="line-card">
           <strong>{{ line.lineName }}</strong>
-          <p>{{ line.originalText }}</p>
-          <p>{{ line.plainExplanation }}</p>
-          <p class="line-note">{{ line.advice }}</p>
+          <p class="line-original">{{ line.originalText }}</p>
+          <p><strong>白话解释：</strong>{{ line.plainExplanation }}</p>
+          <p><strong>现代含义：</strong>{{ line.modernMeaning }}</p>
+          <p class="line-note"><strong>行动建议：</strong>{{ line.advice }}</p>
         </article>
       </div>
     </section>
 
     <section class="glass-panel detail-card" v-if="detail.relatedHexagrams.length">
-      <h2>相关卦象</h2>
+      <h2>相关卦</h2>
       <div class="section-grid three-col">
         <RouterLink
           v-for="item in detail.relatedHexagrams"
@@ -69,6 +88,7 @@
           class="glass-panel related-card"
         >
           <strong>{{ item.name }}</strong>
+          <p>{{ item.structure }}</p>
           <p>{{ item.shortDescription }}</p>
         </RouterLink>
       </div>
@@ -101,6 +121,7 @@ onMounted(async () => {
   color: var(--accent);
   letter-spacing: 0.18em;
   text-transform: uppercase;
+  margin: 0 0 12px;
 }
 
 .keyword-row {
@@ -121,9 +142,16 @@ onMounted(async () => {
   margin-top: 24px;
 }
 
+.question-list {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-soft);
+  line-height: 1.8;
+}
+
 .line-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
 }
 
@@ -134,12 +162,19 @@ onMounted(async () => {
   background: rgba(255, 252, 246, 0.72);
 }
 
-.line-note {
+.line-card p {
+  line-height: 1.75;
+}
+
+.line-original {
   color: var(--brand);
+}
+
+.line-note {
+  color: var(--brand-soft);
 }
 
 .related-card {
   display: block;
 }
 </style>
-

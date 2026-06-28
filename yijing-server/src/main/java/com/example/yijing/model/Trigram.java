@@ -1,5 +1,7 @@
 package com.example.yijing.model;
 
+import java.util.List;
+
 public record Trigram(
         Long id,
         String name,
@@ -10,7 +12,9 @@ public record Trigram(
         String humanMeaning,
         String modernScenario,
         String plainExplanation,
+        String suitableProblems,
+        String commonPitfall,
+        List<Long> relatedHexagramIds,
         Integer sortOrder
 ) {
 }
-
