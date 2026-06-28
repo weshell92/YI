@@ -117,10 +117,11 @@ public class DivinationServiceImpl implements DivinationService {
                 hexagram.id(),
                 hexagram.sequenceNo(),
                 hexagram.name(),
+                hexagram.hexagramSymbol(),
+                hexagram.hexagramCardTitle(),
                 hexagram.structure(),
                 hexagram.keywords(),
                 hexagram.shortDescription()
         );
     }
 }
-

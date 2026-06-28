@@ -158,6 +158,8 @@ public class ContentServiceImpl implements ContentService {
                 item.id(),
                 item.sequenceNo(),
                 item.name(),
+                item.hexagramSymbol(),
+                item.hexagramCardTitle(),
                 item.structure(),
                 item.keywords(),
                 item.shortDescription()
@@ -171,4 +173,3 @@ public class ContentServiceImpl implements ContentService {
                 || item.keywords().stream().anyMatch(keyword -> keyword.toLowerCase(Locale.ROOT).contains(query));
     }
 }
-

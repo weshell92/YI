@@ -24,6 +24,8 @@ export interface HexagramSummary {
   id: number;
   sequenceNo: number;
   name: string;
+  hexagramSymbol: string;
+  hexagramCardTitle: string;
   structure: string;
   keywords: string[];
   shortDescription: string;
@@ -35,12 +37,21 @@ export interface Hexagram {
   name: string;
   upperTrigramId: number;
   lowerTrigramId: number;
+  hexagramSymbol: string;
+  hexagramCardTitle: string;
   structure: string;
   keywords: string[];
   shortDescription: string;
   guaCi: string;
   tuanCi: string;
   xiangCi: string;
+  daXiang: string;
+  wenYan: string;
+  xuGua: string;
+  zaGua: string;
+  shuoGua: string;
+  xiCiShang: string;
+  xiCiXia: string;
   plainExplanation: string;
   situationAnalysis: string;
   advice: string;
@@ -58,6 +69,7 @@ export interface HexagramLine {
   lineNo: number;
   lineName: string;
   originalText: string;
+  xiangOriginalText: string;
   plainExplanation: string;
   modernMeaning: string;
   advice: string;
@@ -87,11 +99,20 @@ export interface CaseStudy {
 export interface CourseLesson {
   id: number;
   orderNo: number;
+  stage: string;
   title: string;
+  overview: string;
   coreConcept: string;
   plainExplanation: string;
+  termNotes: string[];
+  bodyParagraphs: string[];
   diagram: string;
   example: string;
+  realWorldAnalogy: string;
+  commonMistakes: string[];
+  followUpLinks: string[];
+  relatedTrigramIds: number[];
+  relatedHexagramIds: number[];
   quizQuestions: string[];
 }
 

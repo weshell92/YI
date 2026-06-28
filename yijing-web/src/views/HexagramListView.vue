@@ -1,136 +1,106 @@
 <template>
   <div class="page-container">
-    <header class="glass-panel page-header">
-      <p class="eyebrow">Hexagram Index</p>
-      <h1 class="page-title">六十四卦列表</h1>
-      <p class="page-subtitle">
-        这是完整的六十四卦索引页。你可以按卦名、结构、关键词搜索，也可以按阶段区间和常见主题快速浏览。
-      </p>
+    <header class="glass-panel hero">
+      <div>
+        <p class="eyebrow">Hexagram Index</p>
+        <h1 class="page-title">六十四卦卦牌总览</h1>
+        <p class="page-subtitle">
+          每一张卦牌都固定展示序号、卦名、卦符、上下卦结构、关键词和一句话解释。
+          先看结构，再决定进哪一卦详情页继续读原文与十翼。
+        </p>
+      </div>
 
-      <div class="toolbar">
+      <div class="search-panel">
+        <label class="search-label" for="hexagram-search">搜索卦名、结构或关键词</label>
         <el-input
+          id="hexagram-search"
           v-model="keyword"
-          placeholder="搜索卦名、结构、关键词或一句话解释"
-          class="search-box"
+          placeholder="例如：需、履、等待、风险、坎上乾下"
         />
-      </div>
-
-      <div class="filter-row">
-        <span class="filter-label">阶段浏览</span>
-        <button
-          v-for="item in rangeFilters"
-          :key="item.value"
-          class="filter-chip"
-          :class="{ 'filter-chip--active': activeRange === item.value }"
-          @click="activeRange = item.value"
-        >
-          {{ item.label }}
-        </button>
-      </div>
-
-      <div class="filter-row">
-        <span class="filter-label">常见主题</span>
-        <button
-          v-for="item in themeFilters"
-          :key="item.value"
-          class="filter-chip"
-          :class="{ 'filter-chip--active': activeTheme === item.value }"
-          @click="activeTheme = item.value"
-        >
-          {{ item.label }}
-        </button>
+        <p class="result-count">当前共 {{ filteredHexagrams.length }} 条结果</p>
       </div>
     </header>
 
-    <div class="summary-bar glass-panel">
-      <strong>当前结果：</strong>
-      <span>共 {{ filteredHexagrams.length }} 条</span>
-    </div>
+    <section class="glass-panel featured-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Featured</p>
+          <h2>经典卦先看这一组</h2>
+        </div>
+        <p>它们覆盖了起步、等待、规矩、风险、增减与收束这些最常见的现实问题。</p>
+      </div>
 
-    <div class="section-grid two-col hexagram-grid">
+      <div class="featured-grid">
+        <RouterLink
+          v-for="item in featuredHexagrams"
+          :key="item.id"
+          :to="`/hexagrams/${item.id}`"
+          class="featured-card"
+        >
+          <HexagramGlyph :pattern="item.hexagramSymbol" compact />
+          <div>
+            <span class="sequence">第 {{ item.sequenceNo }} 卦</span>
+            <strong>{{ item.name }}</strong>
+            <p>{{ item.hexagramCardTitle }}</p>
+          </div>
+        </RouterLink>
+      </div>
+    </section>
+
+    <section class="hexagram-grid">
       <RouterLink
         v-for="item in filteredHexagrams"
         :key="item.id"
         :to="`/hexagrams/${item.id}`"
         class="glass-panel hexagram-card"
       >
-        <div class="hexagram-head">
-          <span>第 {{ item.sequenceNo }} 卦</span>
-          <strong>{{ item.name }}</strong>
+        <div class="card-top">
+          <div>
+            <span class="sequence">第 {{ item.sequenceNo }} 卦</span>
+            <h2>{{ item.name }}</h2>
+            <p class="card-title">{{ item.hexagramCardTitle }}</p>
+          </div>
+          <HexagramGlyph :pattern="item.hexagramSymbol" compact :aria-label="`${item.name}卦卦符`" />
         </div>
+
         <p class="structure">{{ item.structure }}</p>
         <div class="keyword-row">
           <span v-for="keywordItem in item.keywords" :key="keywordItem">{{ keywordItem }}</span>
         </div>
         <p class="summary">{{ item.shortDescription }}</p>
       </RouterLink>
-    </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import type { HexagramSummary } from '../types';
+import HexagramGlyph from '../components/HexagramGlyph.vue';
 import { fetchHexagrams } from '../api/content';
+import type { HexagramSummary } from '../types';
 
 const keyword = ref('');
-const activeRange = ref('all');
-const activeTheme = ref('all');
 const hexagrams = ref<HexagramSummary[]>([]);
 
-const rangeFilters = [
-  { label: '全部', value: 'all' },
-  { label: '1-8 开局识势', value: '1-8' },
-  { label: '9-16 组织与秩序', value: '9-16' },
-  { label: '17-24 关系与修正', value: '17-24' },
-  { label: '25-32 风险与承压', value: '25-32' },
-  { label: '33-40 进退与解困', value: '33-40' },
-  { label: '41-48 增减与经营', value: '41-48' },
-  { label: '49-56 变革与高光', value: '49-56' },
-  { label: '57-64 收束与完成', value: '57-64' }
-];
-
-const themeFilters = [
-  { label: '全部', value: 'all' },
-  { label: '等待准备', value: '等待' },
-  { label: '开局成长', value: '开创' },
-  { label: '关系协作', value: '关系' },
-  { label: '风险承压', value: '风险' },
-  { label: '变革转折', value: '变革' },
-  { label: '减法止损', value: '减法' }
-];
+const featuredIds = [1, 2, 3, 5, 10, 29, 41, 63, 64];
 
 const filteredHexagrams = computed(() => {
   const query = keyword.value.trim();
+  if (!query) {
+    return hexagrams.value;
+  }
   return hexagrams.value.filter((item) => {
-    const inRange = matchRange(item.sequenceNo, activeRange.value);
-    const inTheme = matchTheme(item, activeTheme.value);
-    const inSearch =
-      !query ||
-      item.name.includes(query) ||
-      item.structure.includes(query) ||
-      item.shortDescription.includes(query) ||
-      item.keywords.some((entry) => entry.includes(query));
-    return inRange && inTheme && inSearch;
+    const source = [item.name, item.hexagramCardTitle, item.structure, item.shortDescription, ...item.keywords].join(' ');
+    return source.includes(query);
   });
 });
 
-function matchRange(sequenceNo: number, range: string) {
-  if (range === 'all') {
-    return true;
-  }
-  const [start, end] = range.split('-').map((value) => Number.parseInt(value, 10));
-  return sequenceNo >= start && sequenceNo <= end;
-}
-
-function matchTheme(item: HexagramSummary, theme: string) {
-  if (theme === 'all') {
-    return true;
-  }
-  const source = [item.name, item.shortDescription, ...item.keywords].join('');
-  return source.includes(theme);
-}
+const featuredHexagrams = computed(() =>
+  featuredIds
+    .map((id) => hexagrams.value.find((item) => item.id === id))
+    .filter((item): item is HexagramSummary => Boolean(item))
+);
 
 onMounted(async () => {
   hexagrams.value = await fetchHexagrams();
@@ -138,79 +108,110 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.page-header,
-.hexagram-card,
-.summary-bar {
+.hero,
+.featured-section,
+.hexagram-card {
   padding: 28px;
 }
 
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  gap: 24px;
+}
+
 .eyebrow {
+  margin: 0 0 12px;
   color: var(--accent);
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  margin: 0 0 12px;
 }
 
-.toolbar {
-  margin-top: 20px;
+.search-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
 }
 
-.filter-row {
-  margin-top: 18px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.filter-label {
-  color: var(--brand-soft);
-  font-size: 0.92rem;
-}
-
-.filter-chip {
-  border: 1px solid var(--border);
-  background: rgba(255, 252, 246, 0.8);
+.search-label,
+.result-count,
+.section-head p,
+.structure,
+.summary,
+.card-title {
   color: var(--text-soft);
-  padding: 8px 12px;
-  border-radius: 999px;
-  cursor: pointer;
 }
 
-.filter-chip--active {
-  background: rgba(35, 75, 64, 0.12);
+.featured-section {
+  margin-top: 24px;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+}
+
+.section-head h2 {
+  margin: 0;
+  color: var(--brand);
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', serif;
+}
+
+.featured-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.featured-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+}
+
+.featured-card strong,
+.hexagram-card h2 {
   color: var(--brand);
 }
 
-.summary-bar {
-  margin-top: 24px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
+.sequence {
+  color: var(--accent);
+  font-size: 0.9rem;
 }
 
 .hexagram-grid {
   margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.hexagram-head {
+.hexagram-card {
+  display: block;
+}
+
+.card-top {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 18px;
 }
 
-.hexagram-head span {
-  color: var(--accent);
-}
-
-.structure {
-  color: var(--brand-soft);
+.card-top h2 {
+  margin: 6px 0 8px;
 }
 
 .keyword-row {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
 }
 
 .keyword-row span {
@@ -222,7 +223,16 @@ onMounted(async () => {
 }
 
 .summary {
-  color: var(--text-soft);
   line-height: 1.8;
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .featured-grid,
+  .hexagram-grid,
+  .section-head {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
 }
 </style>

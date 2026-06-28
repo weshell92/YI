@@ -8,12 +8,21 @@ public record Hexagram(
         String name,
         Long upperTrigramId,
         Long lowerTrigramId,
+        String hexagramSymbol,
+        String hexagramCardTitle,
         String structure,
         List<String> keywords,
         String shortDescription,
         String guaCi,
         String tuanCi,
         String xiangCi,
+        String daXiang,
+        String wenYan,
+        String xuGua,
+        String zaGua,
+        String shuoGua,
+        String xiCiShang,
+        String xiCiXia,
         String plainExplanation,
         String situationAnalysis,
         String advice,
@@ -25,4 +34,3 @@ public record Hexagram(
         List<Long> relatedHexagramIds
 ) {
 }
-

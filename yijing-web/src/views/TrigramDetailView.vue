@@ -26,32 +26,35 @@
 
     <div class="section-grid two-col detail-grid">
       <section class="glass-panel detail-card">
-        <h2>现实应用场景</h2>
+        <h2>现代应用场景</h2>
         <p>{{ trigram.modernScenario }}</p>
       </section>
       <section class="glass-panel detail-card">
-        <h2>适合解决的问题</h2>
+        <h2>适合处理的问题</h2>
         <p>{{ trigram.suitableProblems }}</p>
       </section>
     </div>
 
     <section class="glass-panel detail-card">
-      <h2>易错理解</h2>
+      <h2>常见误区</h2>
       <p>{{ trigram.commonPitfall }}</p>
     </section>
 
     <section class="glass-panel detail-card" v-if="relatedHexagrams.length">
-      <h2>由这个八卦延伸出的典型六十四卦</h2>
-      <div class="section-grid three-col">
+      <h2>相关六十四卦</h2>
+      <div class="related-grid">
         <RouterLink
           v-for="item in relatedHexagrams"
           :key="item.id"
           :to="`/hexagrams/${item.id}`"
-          class="glass-panel related-card"
+          class="related-card"
         >
-          <strong>{{ item.name }}</strong>
-          <p>{{ item.structure }}</p>
-          <p>{{ item.shortDescription }}</p>
+          <HexagramGlyph :pattern="item.hexagramSymbol" compact />
+          <div>
+            <strong>{{ item.name }}</strong>
+            <p>{{ item.hexagramCardTitle }}</p>
+            <p>{{ item.shortDescription }}</p>
+          </div>
         </RouterLink>
       </div>
     </section>
@@ -61,8 +64,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
-import type { HexagramSummary, Trigram } from '../types';
+import HexagramGlyph from '../components/HexagramGlyph.vue';
 import { fetchHexagrams, fetchTrigram } from '../api/content';
+import type { HexagramSummary, Trigram } from '../types';
 
 const route = useRoute();
 const trigram = ref<Trigram | null>(null);
@@ -78,15 +82,18 @@ const relatedHexagrams = computed(() => {
 });
 
 onMounted(async () => {
-  trigram.value = await fetchTrigram(route.params.id as string);
-  hexagrams.value = await fetchHexagrams();
+  const [trigramData, hexagramData] = await Promise.all([
+    fetchTrigram(route.params.id as string),
+    fetchHexagrams()
+  ]);
+  trigram.value = trigramData;
+  hexagrams.value = hexagramData;
 });
 </script>
 
 <style scoped>
 .detail-header,
-.detail-card,
-.related-card {
+.detail-card {
   padding: 28px;
 }
 
@@ -117,7 +124,27 @@ onMounted(async () => {
   padding: 20px;
 }
 
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
 .related-card {
-  display: block;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 252, 246, 0.76);
+  border: 1px solid rgba(35, 75, 64, 0.08);
+}
+
+@media (max-width: 960px) {
+  .related-grid,
+  .trigram-heading {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
 }
 </style>

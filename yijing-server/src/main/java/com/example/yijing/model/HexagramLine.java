@@ -6,9 +6,9 @@ public record HexagramLine(
         Integer lineNo,
         String lineName,
         String originalText,
+        String xiangOriginalText,
         String plainExplanation,
         String modernMeaning,
         String advice
 ) {
 }
-

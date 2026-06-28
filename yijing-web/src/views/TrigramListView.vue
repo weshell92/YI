@@ -4,11 +4,11 @@
       <p class="eyebrow">Eight Trigrams</p>
       <h1 class="page-title">八卦列表</h1>
       <p class="page-subtitle">
-        八卦是进入六十四卦之前最重要的一层基础。每一卦都对应一种自然象、一种性格倾向和一类现实场景。
+        八卦是六十四卦的前置层。先认识自然象、五行、性质与现代场景，再进入完整卦牌阅读。
       </p>
     </header>
 
-    <div class="section-grid two-col trigram-grid">
+    <div class="trigram-grid">
       <RouterLink
         v-for="trigram in trigrams"
         :key="trigram.id"
@@ -39,8 +39,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
-import type { Trigram } from '../types';
 import { fetchTrigrams } from '../api/content';
+import type { Trigram } from '../types';
 
 const trigrams = ref<Trigram[]>([]);
 
@@ -64,15 +64,13 @@ onMounted(async () => {
 
 .trigram-grid {
   margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
 .trigram-card {
   display: block;
-  transition: transform 0.2s ease;
-}
-
-.trigram-card:hover {
-  transform: translateY(-4px);
 }
 
 .trigram-top {
@@ -89,5 +87,11 @@ onMounted(async () => {
 .lead {
   color: var(--text-soft);
   line-height: 1.8;
+}
+
+@media (max-width: 960px) {
+  .trigram-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
