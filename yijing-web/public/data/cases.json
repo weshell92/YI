@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "想离职创业但资金不足",
+    "category": "创业",
+    "background": "某人工作五年，想离职创业，但积蓄只够支撑六个月，团队也还没有搭建完成。",
+    "hexagramId": 3,
+    "analysis": "得屯卦。屯代表初生之难，事情刚开始，阻力大，资源不足。",
+    "modernAnalysis": "不是说不能创业，而是说现在还在草创阶段，需要先解决资源、团队、现金流问题。",
+    "advice": "先小规模试错，不要一次性赌上全部。保留一部分退路。",
+    "sortOrder": 1,
+    "published": true
+  },
+  {
+    "id": 2,
+    "title": "新入职同事关系复杂",
+    "category": "职场",
+    "background": "一个人刚进入新公司，领导重视他，但同事关系复杂，他应该怎么做？",
+    "hexagramId": 10,
+    "analysis": "得履卦。履卦讲的是“踩在老虎尾巴上”，代表处在有风险、有规矩、有压力的环境中。",
+    "modernAnalysis": "此时不宜锋芒毕露，要谨慎行事，尊重既有规则和人际边界。",
+    "advice": "先观察，少说多做，用可靠的结果建立信任，再逐步扩大影响。",
+    "sortOrder": 2,
+    "published": true
+  },
+  {
+    "id": 3,
+    "title": "感情中是否该主动表白",
+    "category": "感情",
+    "background": "两人认识半年，关系暧昧，但始终没挑明，要不要主动表白？",
+    "hexagramId": 5,
+    "analysis": "得需卦。需卦强调等待与蓄势，时机未到不宜强推。",
+    "modernAnalysis": "不是不能表白，而是要看清楚对方的态度和当前关系的节奏。",
+    "advice": "在表白前，先用更明确的互动测试对方心意，避免单方面推进。",
+    "sortOrder": 3,
+    "published": true
+  },
+  {
+    "id": 4,
+    "title": "合作谈判陷入僵持",
+    "category": "合作",
+    "background": "两家公司谈合作，价格条款谈不拢，双方都很强势。",
+    "hexagramId": 6,
+    "analysis": "得讼卦。讼卦象征争议，硬碰硬只会两败俱伤。",
+    "modernAnalysis": "继续对抗下去，即使赢了也会付出信任和时间成本。",
+    "advice": "寻找双方都信任的第三方调解，或把大合作拆成小步试点。",
+    "sortOrder": 4,
+    "published": true
+  }
+]

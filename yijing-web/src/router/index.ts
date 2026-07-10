@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LearnView from '../views/LearnView.vue';
 import TrigramListView from '../views/TrigramListView.vue';
@@ -13,7 +13,7 @@ import UserCenterView from '../views/UserCenterView.vue';
 import AdminView from '../views/AdminView.vue';
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     { path: '/', component: HomeView },
     { path: '/learn', component: LearnView },
